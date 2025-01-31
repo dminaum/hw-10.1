@@ -11,7 +11,7 @@ def filter_by_state(data: list[dict[str, str]], state: str = "EXECUTED") -> list
     :return: Отфильтрованный список словарей.
     """
     # Фильтруем элементы списка по состоянию
-    data = [d for d in data if d["state"] == state]
+    data = [dict_ for dict_ in data if dict_["state"] == state]
     return data
 
 
