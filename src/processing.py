@@ -1,4 +1,4 @@
-from widget import get_date
+from src.widget import get_date
 
 
 def filter_by_state(data: list[dict[str, str]], state: str = "EXECUTED") -> list[dict[str, str]]:

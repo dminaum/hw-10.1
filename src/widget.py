@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from masks import get_mask_account, get_mask_card_number
+from src.masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(data: str) -> str:
@@ -17,7 +17,8 @@ def mask_account_card(data: str) -> str:
         number = data.split(" ")[1]
         return f"Счет {get_mask_account(number)}"
     else:
-        card_number, card_name = data.rsplit(" ", 1)
+        *card_name, card_number = data.split(" ")  # Разбиваем на части, оставив имя карты и номер
+        card_name = " ".join(card_name)  # Собираем имя карты обратно
         return f"{card_name} {get_mask_card_number(card_number)}"
 
 
