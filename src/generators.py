@@ -18,6 +18,6 @@ def card_number_generator(start: int, stop: int) -> Generator[str, None, None]:
     card_number = start
     while card_number <= stop:
         card_str = str(card_number).zfill(16)
-        formatted_card = " ".join([card_str[i: i + 4] for i in range(0, 16, 4)])
+        formatted_card = " ".join([card_str[i : i + 4] for i in range(0, 16, 4)])
         yield formatted_card
         card_number += 1

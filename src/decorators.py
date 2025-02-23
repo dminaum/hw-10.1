@@ -1,7 +1,7 @@
 import functools
 import logging
 import sys
-from typing import Callable, Any, Optional
+from typing import Any, Callable, Optional
 
 
 def log(filename: Optional[str] = None) -> Callable:
@@ -9,13 +9,14 @@ def log(filename: Optional[str] = None) -> Callable:
     Декоратор для логирования выполнения функции.
     Логи записываются в файл (если указан filename) или выводятся в консоль.
     """
+
     def decorator(func: Callable) -> Callable:
         logger = logging.getLogger(func.__name__)
         logger.setLevel(logging.INFO)
         logger.propagate = False  # Отключаем повторную обработку логов
 
-        handler = logging.FileHandler(filename, mode='a', encoding='utf-8') if filename else logging.StreamHandler()
-        handler.setFormatter(logging.Formatter('%(message)s'))
+        handler = logging.FileHandler(filename, mode="a", encoding="utf-8") if filename else logging.StreamHandler()
+        handler.setFormatter(logging.Formatter("%(message)s"))
 
         if not logger.handlers:  # Чтобы не дублировать обработчики при многократном декорировании
             logger.addHandler(handler)
