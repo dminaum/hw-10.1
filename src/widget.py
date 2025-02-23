@@ -17,8 +17,8 @@ def mask_account_card(data: str) -> str:
         number = data.split(" ")[1]
         return f"Счет {get_mask_account(number)}"
     else:
-        *card_name, card_number = data.split(" ")  # Разбиваем на части, оставив имя карты и номер
-        card_name = " ".join(card_name)  # Собираем имя карты обратно
+        *card_name_parts, card_number = data.split(" ")  # Разбиваем на части, оставив имя карты и номер
+        card_name = " ".join(card_name_parts)  # Собираем имя карты обратно
         return f"{card_name} {get_mask_card_number(card_number)}"
 
 

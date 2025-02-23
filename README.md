@@ -1,12 +1,13 @@
 # Описание проекта
 
-Этот проект предназначен для обработки финансовых данных. Он включает функции для маскирования номеров карт и счетов, форматирования дат и фильтрации операций по статусу.
+Этот проект предназначен для обработки финансовых данных. Он включает функции для маскирования номеров карт и счетов, форматирования дат, фильтрации операций по статусу и работы с генераторами.
 
 ## Структура проекта
 
 - `masks.py` – содержит функции для маскирования номеров карт и счетов.
 - `widget.py` – предоставляет функции для форматирования дат и маскирования данных.
 - `processing.py` – отвечает за обработку списка операций: фильтрацию по статусу и сортировку по дате.
+- `generators.py` – содержит генераторы для фильтрации транзакций по валюте, получения описаний транзакций и генерации номеров карт.
 - `tests/` – содержит тесты для проверки функциональности проекта.
 
 ## Установка
@@ -78,9 +79,52 @@ sorted_data = sort_by_date(data)
 print(sorted_data)  # Отсортирует операции по дате (по убыванию)
 ```
 
+## Работа с генераторами
+
+### Фильтрация транзакций по валюте
+
+```python
+from generators import filter_by_currency
+
+transactions = [
+    {"operationAmount": {"currency": {"code": "USD"}}, "description": "Transaction 1"},
+    {"operationAmount": {"currency": {"code": "EUR"}}, "description": "Transaction 2"},
+    {"operationAmount": {"currency": {"code": "USD"}}, "description": "Transaction 3"}
+]
+
+usd_transactions = filter_by_currency(transactions, "USD")
+for transaction in usd_transactions:
+    print(transaction)
+```
+
+### Получение описаний транзакций
+
+```python
+from generators import transaction_descriptions
+
+transactions = [
+    {"description": "Payment for order #1234"},
+    {"description": "Refund from store"},
+    {"description": "Salary payment"}
+]
+
+descriptions = transaction_descriptions(transactions)
+for description in descriptions:
+    print(description)
+```
+
+### Генерация номеров карт
+
+```python
+from generators import card_number_generator
+
+for card_number in card_number_generator(1000000000000000, 1000000000000005):
+    print(card_number)
+```
+
 ## Тестирование
 
-Проект содержит тесты, проверяющие основные функции.
+Проект содержит тесты, проверяющие основные функции, включая генераторы.
 
 ### Запуск тестов
 
@@ -104,3 +148,4 @@ start htmlcov/index.html
 ### Использование фикстур и параметризации
 
 В тестах применяются фикстуры для генерации данных и параметризация для проверки различных сценариев работы функций.
+
