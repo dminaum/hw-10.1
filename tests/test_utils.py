@@ -1,6 +1,8 @@
-import pytest
-import os
 import json
+import os
+
+import pytest
+
 from src.utils import load_transactions
 
 TEST_FILE = "data/test_operations.json"
@@ -11,7 +13,7 @@ def setup_test_file():
     """Создаёт тестовый JSON-файл перед тестами и удаляет после"""
     data = [
         {"id": 1, "amount": 100, "currency": "USD", "date": "2025-02-10"},
-        {"id": 2, "amount": -50, "currency": "EUR", "date": "2025-02-09"}
+        {"id": 2, "amount": -50, "currency": "EUR", "date": "2025-02-09"},
     ]
     with open(TEST_FILE, "w", encoding="utf-8") as file:
         json.dump(data, file)

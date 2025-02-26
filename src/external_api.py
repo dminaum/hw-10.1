@@ -1,4 +1,5 @@
 import os
+
 import requests
 from dotenv import load_dotenv
 
@@ -25,8 +26,7 @@ def convert_to_rubles(amount: float, currency_from: str, currency_to: str = "RUB
         response = requests.get(url, headers=headers)
         response.raise_for_status()  # Проверяем HTTP-статус (если 4xx или 5xx, выбросит ошибку)
         data = response.json()
-        return data.get("result")
+        return float(data.get("result"))
     except requests.exceptions.RequestException as e:
         print(f"Ошибка при запросе API: {e}")
         return None  # В случае ошибки возвращаем None
-
