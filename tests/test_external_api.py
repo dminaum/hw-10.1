@@ -1,6 +1,7 @@
 import json
 import os
-from unittest.mock import patch
+from typing import Generator
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -11,7 +12,7 @@ TEST_FILE = "test_operations.json"
 
 
 @pytest.fixture
-def setup_test_file():
+def setup_test_file() -> Generator[None, None, None]:
     """Создаёт тестовый JSON-файл перед тестами и удаляет после"""
     data = [
         {"id": 1, "amount": 100, "currency": "USD", "date": "2025-02-10"},
@@ -25,7 +26,7 @@ def setup_test_file():
     os.remove(TEST_FILE)  # Удаляем файл после тестов
 
 
-def test_load_transactions(setup_test_file):
+def test_load_transactions(setup_test_file: None) -> None:
     transactions = load_transactions(TEST_FILE)
     assert isinstance(transactions, list)
     assert len(transactions) == 2
@@ -33,11 +34,11 @@ def test_load_transactions(setup_test_file):
     assert transactions[1]["currency"] == "EUR"
 
 
-def test_load_transactions_file_not_found():
+def test_load_transactions_file_not_found() -> None:
     assert load_transactions("nonexistent.json") == []
 
 
-def test_load_transactions_invalid_file():
+def test_load_transactions_invalid_file() -> None:
     with open(TEST_FILE, "w", encoding="utf-8") as file:
         file.write("INVALID JSON")
 
@@ -53,7 +54,7 @@ def test_load_transactions_invalid_file():
     ],
 )
 @patch("src.external_api.requests.get")
-def test_convert_to_rubles(mock_get, amount, currency, expected):
+def test_convert_to_rubles(mock_get: MagicMock, amount: int, currency: str, expected: float) -> None:
     mock_get.return_value.json.return_value = {"result": expected}
     mock_get.return_value.raise_for_status = lambda: None  # Подавляем ошибки
 
@@ -62,6 +63,6 @@ def test_convert_to_rubles(mock_get, amount, currency, expected):
 
 
 @patch("src.utils.convert_to_rubles", return_value=7500.0)
-def test_get_transaction_amount_in_rubles(mock_convert):
+def test_get_transaction_amount_in_rubles(mock_convert: MagicMock) -> None:
     transaction = {"operationAmount": {"amount": "100", "currency": {"name": "доллары", "code": "USD"}}}
     assert get_transaction_amount_in_rubles(transaction) == 7500.0
