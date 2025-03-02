@@ -1,5 +1,6 @@
 import json
 import os
+from typing import Generator
 
 import pytest
 
@@ -9,7 +10,7 @@ TEST_FILE = "data/test_operations.json"
 
 
 @pytest.fixture
-def setup_test_file():
+def setup_test_file() -> Generator[None, None, None]:
     """Создаёт тестовый JSON-файл перед тестами и удаляет после"""
     data = [
         {"id": 1, "amount": 100, "currency": "USD", "date": "2025-02-10"},
@@ -23,13 +24,13 @@ def setup_test_file():
     os.remove(TEST_FILE)  # Удаляем файл после тестов
 
 
-def test_load_transactions_valid(setup_test_file):
+def test_load_transactions_valid(setup_test_file: None) -> None:
     transactions = load_transactions(TEST_FILE)
     assert len(transactions) == 2
     assert transactions[0]["amount"] == 100
 
 
-def test_load_transactions_empty():
+def test_load_transactions_empty() -> None:
     with open(TEST_FILE, "w", encoding="utf-8") as file:
         file.write("")  # Записываем пустой файл
 
@@ -37,7 +38,7 @@ def test_load_transactions_empty():
     assert transactions == []
 
 
-def test_load_transactions_invalid():
+def test_load_transactions_invalid() -> None:
     with open(TEST_FILE, "w", encoding="utf-8") as file:
         file.write("not a json")  # Некорректный JSON
 
@@ -45,13 +46,13 @@ def test_load_transactions_invalid():
     assert transactions == []
 
 
-def test_load_transactions_no_file():
+def test_load_transactions_no_file() -> None:
     transactions = load_transactions("data/non_existent.json")
     assert transactions == []
 
 
 @pytest.fixture(scope="session", autouse=True)
-def cleanup():
+def cleanup() -> Generator[None, None, None]:
     yield  # Выполняем тесты
 
     if os.path.exists(TEST_FILE):
