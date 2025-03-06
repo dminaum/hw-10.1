@@ -1,6 +1,6 @@
 # Описание проекта
 
-Этот проект предназначен для обработки финансовых данных. Он включает функции для маскирования номеров карт и счетов, форматирования дат, фильтрации операций по статусу и работы с генераторами.
+Этот проект предназначен для обработки финансовых данных. Он включает функции для маскирования номеров карт и счетов, форматирования дат, фильтрации операций по статусу, работы с генераторами и чтения данных из CSV/XLSX файлов.
 
 ## Структура проекта
 
@@ -8,6 +8,7 @@
 - `widget.py` – предоставляет функции для форматирования дат и маскирования данных.
 - `processing.py` – отвечает за обработку списка операций: фильтрацию по статусу и сортировку по дате.
 - `generators.py` – содержит генераторы для фильтрации транзакций по валюте, получения описаний транзакций и генерации номеров карт.
+- `read_dataframes.py` – предоставляет функции для чтения финансовых данных из CSV и XLSX файлов.
 - `tests/` – содержит тесты для проверки функциональности проекта.
 
 ## Установка
@@ -37,17 +38,6 @@ print(get_mask_card_number("7000792289606361"))  # Вывод: "7000 79** **** 6
 print(get_mask_account("73654108430135874305"))  # Вывод: "**4305"
 ```
 
-### Обработка строк с номерами карт и счетов
-
-Пример работы `mask_account_card`:
-
-```python
-from widget import mask_account_card
-
-print(mask_account_card("Visa Platinum 7000792289606361"))  # Вывод: "Visa Platinum 7000 **** **** 6361"
-print(mask_account_card("Счет 73654108430135874305"))  # Вывод: "Счет **4305"
-```
-
 ### Форматирование дат
 
 ```python
@@ -70,18 +60,9 @@ filtered = filter_by_state(data)
 print(filtered)  # Оставит только операции со статусом "EXECUTED"
 ```
 
-### Сортировка операций по дате
+### Работа с генераторами
 
-```python
-from processing import sort_by_date
-
-sorted_data = sort_by_date(data)
-print(sorted_data)  # Отсортирует операции по дате (по убыванию)
-```
-
-## Работа с генераторами
-
-### Фильтрация транзакций по валюте
+#### Фильтрация транзакций по валюте
 
 ```python
 from generators import filter_by_currency
@@ -97,34 +78,29 @@ for transaction in usd_transactions:
     print(transaction)
 ```
 
-### Получение описаний транзакций
+### Чтение данных из CSV/XLSX
+
+#### Чтение CSV
 
 ```python
-from generators import transaction_descriptions
+from read_dataframes import read_csv
 
-transactions = [
-    {"description": "Payment for order #1234"},
-    {"description": "Refund from store"},
-    {"description": "Salary payment"}
-]
-
-descriptions = transaction_descriptions(transactions)
-for description in descriptions:
-    print(description)
+data = read_csv("transactions.csv")
+print(data)
 ```
 
-### Генерация номеров карт
+#### Чтение XLSX
 
 ```python
-from generators import card_number_generator
+from read_dataframes import read_xlsx
 
-for card_number in card_number_generator(1000000000000000, 1000000000000005):
-    print(card_number)
+data = read_xlsx("transactions.xlsx")
+print(data)
 ```
 
 ## Тестирование
 
-Проект содержит тесты, проверяющие основные функции, включая генераторы.
+Проект содержит тесты, проверяющие основные функции, включая генераторы и обработку файлов.
 
 ### Запуск тестов
 
