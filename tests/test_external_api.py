@@ -17,34 +17,22 @@ def setup_test_file() -> Generator[None, None, None]:
     data = [
         {
             "id": 1,
-            "operationAmount": {
-                "amount": 100,
-                "currency": {
-                    "code": "USD",
-                    "name": "доллар"
-                }
-            },
+            "operationAmount": {"amount": 100, "currency": {"code": "USD", "name": "доллар"}},
             "date": "2025-02-10",
             "state": "completed",
-            "to": '1',
+            "to": "1",
             "from": "1",
-            'description': 'Перевод'
+            "description": "Перевод",
         },
         {
             "id": 2,
-            "operationAmount": {
-                "amount": -50,
-                "currency": {
-                    "code": "EUR",
-                    "name": "евро"
-                }
-            },
+            "operationAmount": {"amount": -50, "currency": {"code": "EUR", "name": "евро"}},
             "date": "2025-02-09",
             "state": "pending",
-            "to": '1',
+            "to": "1",
             "from": "1",
-            'description': 'Перевод'
-        }
+            "description": "Перевод",
+        },
     ]
 
     with open(TEST_FILE, "w", encoding="utf-8") as file:

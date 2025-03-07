@@ -1,14 +1,15 @@
 import re
-from collections import Counter, defaultdict
+from collections import Counter
 from typing import Dict, List
 
 
 def sort_dataframes_by_desc(transactions: List[Dict], match: str) -> List[Dict]:
-    """Принимает список словарей с данными о банковских операциях и строку поиска. Возвращать список словарей, у которых в описании есть данная строка."""
+    """Принимает список словарей с данными о банковских операциях и строку поиска.
+    Возвращает список словарей, у которых в описании есть данная строка."""
     result_list = []
-    pattern = re.compile(rf'{match}', re.IGNORECASE)
+    pattern = re.compile(rf"{match}", re.IGNORECASE)
     for transaction in transactions:
-        if pattern.search(transaction['description']) is not None:
+        if pattern.search(transaction["description"]) is not None:
             result_list.append(transaction)
         else:
             continue
@@ -16,8 +17,9 @@ def sort_dataframes_by_desc(transactions: List[Dict], match: str) -> List[Dict]:
 
 
 def count_operations_by_category(transactions: List[Dict[str, str]]) -> Dict[str, int]:
-    """Считает количество операций по точным категориям на основе поля 'description', определяя категории автоматически."""
-    category_counts = Counter()
+    """Считает количество операций по точным категориям на основе поля 'description',
+    определяя категории автоматически."""
+    category_counts: Counter[str] = Counter()
     descriptions = [transaction.get("description", "").lower() for transaction in transactions]
 
     # Извлекаем уникальные описания как категории
