@@ -1,5 +1,4 @@
 from io import StringIO
-from typing import Dict, List
 from unittest.mock import MagicMock, mock_open, patch
 
 import pandas as pd

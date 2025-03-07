@@ -34,7 +34,8 @@ def load_transactions(file_path: str) -> List[Dict]:
                 # Преобразуем данные, чтобы они соответствовали CSV/XLSX!
                 normalized_data = []
                 for transaction in data:
-                    try: normalized_transaction = {
+                    try:
+                        normalized_transaction = {
                             "id": transaction["id"],
                             "state": transaction["state"],
                             "date": transaction["date"],
@@ -43,7 +44,7 @@ def load_transactions(file_path: str) -> List[Dict]:
                             "currency_code": transaction["operationAmount"]["currency"]["code"],  # Код валюты
                             "from": transaction.get("from", "Не указано"),  # Если нет "from", ставим заглушку
                             "to": transaction["to"],
-                            "description": transaction["description"]
+                            "description": transaction["description"],
                         }
                     except KeyError as e:
                         logger.warning(f"Пропущена транзакция из-за отсутствующего ключа {e}: {transaction}")

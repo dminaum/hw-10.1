@@ -1,6 +1,8 @@
-import pytest
 from datetime import datetime
-from src.widget import mask_account_card, get_date, format_date
+
+import pytest
+
+from src.widget import format_date, get_date, mask_account_card
 
 
 # Тесты для mask_account_card
@@ -12,7 +14,7 @@ from src.widget import mask_account_card, get_date, format_date
         ("MasterCard 1234567812345678", "MasterCard 1234 56** **** 5678"),
     ],
 )
-def test_mask_account_card(data, expected):
+def test_mask_account_card(data: str, expected: str) -> None:
     assert mask_account_card(data) == expected
 
 
@@ -24,7 +26,7 @@ def test_mask_account_card(data, expected):
         ("2023-06-21T10:15:30.000000", datetime(2023, 6, 21, 0, 0, 0, 0)),
     ],
 )
-def test_get_date(date_str, expected):
+def test_get_date(date_str: str, expected: datetime) -> None:
     assert get_date(date_str) == expected
 
 
@@ -36,5 +38,5 @@ def test_get_date(date_str, expected):
         (datetime(2023, 6, 21, 0, 0, 0, 0), "21.06.2023"),
     ],
 )
-def test_format_date(date_obj, expected):
+def test_format_date(date_obj: datetime, expected: str) -> None:
     assert format_date(date_obj) == expected

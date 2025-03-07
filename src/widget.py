@@ -31,7 +31,6 @@ def mask_account_card(data: str) -> str:
     return f"{card_name} {get_mask_card_number(card_number)}"
 
 
-
 def get_date(date_str: str) -> datetime:
     """
     Преобразует строку с датой из формата "2024-03-11T02:26:18.671407"
