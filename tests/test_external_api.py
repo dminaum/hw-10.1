@@ -15,9 +15,38 @@ TEST_FILE = "test_operations.json"
 def setup_test_file() -> Generator[None, None, None]:
     """Создаёт тестовый JSON-файл перед тестами и удаляет после"""
     data = [
-        {"id": 1, "amount": 100, "currency": "USD", "date": "2025-02-10"},
-        {"id": 2, "amount": -50, "currency": "EUR", "date": "2025-02-09"},
+        {
+            "id": 1,
+            "operationAmount": {
+                "amount": 100,
+                "currency": {
+                    "code": "USD",
+                    "name": "доллар"
+                }
+            },
+            "date": "2025-02-10",
+            "state": "completed",
+            "to": '1',
+            "from": "1",
+            'description': 'Перевод'
+        },
+        {
+            "id": 2,
+            "operationAmount": {
+                "amount": -50,
+                "currency": {
+                    "code": "EUR",
+                    "name": "евро"
+                }
+            },
+            "date": "2025-02-09",
+            "state": "pending",
+            "to": '1',
+            "from": "1",
+            'description': 'Перевод'
+        }
     ]
+
     with open(TEST_FILE, "w", encoding="utf-8") as file:
         json.dump(data, file)
 
@@ -31,7 +60,7 @@ def test_load_transactions(setup_test_file: None) -> None:
     assert isinstance(transactions, list)
     assert len(transactions) == 2
     assert transactions[0]["amount"] == 100
-    assert transactions[1]["currency"] == "EUR"
+    assert transactions[1]["currency_code"] == "EUR"
 
 
 def test_load_transactions_file_not_found() -> None:
@@ -64,5 +93,5 @@ def test_convert_to_rubles(mock_get: MagicMock, amount: int, currency: str, expe
 
 @patch("src.utils.convert_to_rubles", return_value=7500.0)
 def test_get_transaction_amount_in_rubles(mock_convert: MagicMock) -> None:
-    transaction = {"operationAmount": {"amount": "100", "currency": {"name": "доллары", "code": "USD"}}}
+    transaction = {"id": 2, "amount": 100, "currency_code": "USD", "date": "2025-02-09", "state": "pending"}
     assert get_transaction_amount_in_rubles(transaction) == 7500.0
