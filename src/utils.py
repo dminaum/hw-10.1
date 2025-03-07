@@ -26,12 +26,35 @@ def load_transactions(file_path: str) -> List[Dict]:
     try:
         with open(file_path, "r", encoding="utf-8") as file:
             data = json.load(file)
+
             if isinstance(data, list):
+
                 logger.info(f"Файл {file_path} успешно загружен. Найдено {len(data)} записей.")
-                return data
+
+                # Преобразуем данные, чтобы они соответствовали CSV/XLSX!
+                normalized_data = []
+                for transaction in data:
+                    try: normalized_transaction = {
+                            "id": transaction["id"],
+                            "state": transaction["state"],
+                            "date": transaction["date"],
+                            "amount": transaction["operationAmount"]["amount"],  # Достаём сумму
+                            "currency_name": transaction["operationAmount"]["currency"]["name"],  # Название валюты
+                            "currency_code": transaction["operationAmount"]["currency"]["code"],  # Код валюты
+                            "from": transaction.get("from", "Не указано"),  # Если нет "from", ставим заглушку
+                            "to": transaction["to"],
+                            "description": transaction["description"]
+                        }
+                    except KeyError as e:
+                        logger.warning(f"Пропущена транзакция из-за отсутствующего ключа {e}: {transaction}")
+                    normalized_data.append(normalized_transaction)
+
+                return normalized_data  # Возвращаем список с нормализованными данными
+
             else:
-                logger.warning(f"Файл {file_path} не содержит список. Возвращаем пустой список.")
+                logger.warning(f"Файл {file_path} не содержит список транзакций.")
                 return []
+
     except json.JSONDecodeError:
         logger.error(f"Ошибка декодирования JSON в файле {file_path}.")
         return []
@@ -47,8 +70,8 @@ def get_transaction_amount_in_rubles(transaction: dict) -> float | None:
     :return: Сумма в рублях или None в случае ошибки
     """
     try:
-        amount = float(transaction["operationAmount"]["amount"])
-        currency = transaction["operationAmount"]["currency"]["code"]
+        amount = float(transaction["amount"])
+        currency = transaction["currency_code"]
         result = convert_to_rubles(amount, currency)
         logger.info(f"Конвертация {amount} {currency} в рубли: {result}")
         return result

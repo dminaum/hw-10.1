@@ -11,6 +11,6 @@ def read_csv(path: str) -> List[Dict[str, str]]:
 
 
 def read_xlsx(path: str) -> List[Dict]:
-    df = pd.read_excel(path, dtype=str)  # Читаем файл как DataFrame
+    df = pd.read_excel(path)  # Читаем файл как DataFrame
     transactions = df.to_dict(orient="records")  # Преобразуем в список словарей
     return transactions
